@@ -6,3 +6,5 @@ export interface Result {
   ok: OK_Result[],
   ko: KO_Result[]
 }
+
+export const InitialResult: Result = { ok: [], ko: [] }

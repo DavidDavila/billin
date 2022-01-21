@@ -12,12 +12,12 @@
   "author": "Billin team",
   "license": "ISC",
   "devDependencies": {
-    "@types/jest": "^25.1.4",
-    "@types/node": "^13.11.1",
-    "eslint": "^7.28.0",
-    "jest": "^25.2.4",
-    "ts-jest": "^25.3.0",
-    "typescript": "^3.8.3"
+    "@types/jest": "^25.2.3",
+    "@types/node": "^13.13.52",
+    "eslint": "^7.32.0",
+    "jest": "^25.5.4",
+    "ts-jest": "^25.5.1",
+    "typescript": "^3.9.10"
   },
   "dependencies": {}
 }

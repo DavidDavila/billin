@@ -1,0 +1,1 @@
+export const FILE_FOLDER_LOCATION = `${ __dirname }/../../files/`
