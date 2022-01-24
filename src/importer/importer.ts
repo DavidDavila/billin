@@ -42,15 +42,12 @@ export class Importer {
       }
 
       this.jsFile = this.formatThisCsv();                                                            // Transform string to Json and aply custom keys if it is needed
-
       this.validatedInvoice = this.validateCsvObject();                                                // Extract errors if exists.
-
 
       let result: Result = {
         ok: this.validatedInvoice
           .filter((invoiceResume: ControlInvoice) => !invoiceResume.errors.length)
           .map(invoice => invoice.data) as OK_Result[],
-
         ko: this.validatedInvoice
           .map((invoice, index: number) =>
           ({
@@ -71,7 +68,7 @@ export class Importer {
         data: invoiceObject,
         errors: [
           ...Object.keys(invoiceObject)
-            .map((key: string) => findErrors(key as keyof OK_Result, invoiceObject[key]))           //key is could be whatever string, but on findErrors where are looking for specific object keys
+            .map((key: string) => findErrors(key as keyof OK_Result, invoiceObject[key]))           //key is could be whatever string, but on findErrors where are looking for specific object keys. Also you can pass as third param a key validator
             .filter(err => err)
         ]
       }
@@ -79,7 +76,7 @@ export class Importer {
   }
 
   formatThisCsv(file: string = this.file): Object[] {
-    return formatCsv(file, InvoiceLiterals);                                                     //Literals are optionals.Its apply when you want change the keys of the returned Json
+    return formatCsv(file, InvoiceLiterals);                                                        //Literals are optionals.Its apply when you want change the keys of the returned Json
   }
 
 }
