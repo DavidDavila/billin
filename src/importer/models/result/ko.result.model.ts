@@ -1,11 +1,11 @@
 import { OK_Result } from './ok.result.model';
 
-enum Error_Message {
-  Invalid = 'Invalid',
-  Required = 'Required',
+export enum Error_Message {
+  Invalid = 'invalid',
+  Required = 'required',
 }
 
-interface Error_Result {
+export interface Error_Result {
   property: keyof OK_Result,
   message: Error_Message,
 }

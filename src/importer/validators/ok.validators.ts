@@ -1,4 +1,6 @@
 import { Status_Field_Result } from '../models/result/fields.result.model';
+import { Error_Message, Error_Result } from '../models/result/ko.result.model';
+import { OK_Result } from '../models/result/ok.result.model';
 
 const OK_Result_Validation: { [key: string]: Function } = {
   code: (code: any) => typeof (code) === 'string',
@@ -12,13 +14,28 @@ const OK_Result_Validation: { [key: string]: Function } = {
 };
 
 
-export const isCorrectField = (key: string, value: any) => {
+export const findErrors = (property: keyof OK_Result, value: any): Error_Result | null => {
   const validateFunction = OK_Result_Validation;
+  if (!value) {
+    return {
+      property,
+      message: Error_Message.Required
+    }
+  }
   try {
-    return (validateFunction[key](value));
+    if (!validateFunction[property](value)) {
+      return {
+        property,
+        message: Error_Message.Invalid
+      }
+    }
+    return null;
   } catch (error) {                                                                  //Unknow object param. TO DO: Add this error to errors.ts
-    console.error('Unknow object param', key, value);
-    return false;
+    console.error('Unknow object param', property, value);
+    return {
+      property,
+      message: Error_Message.Invalid
+    }
   }
 }
 

@@ -3,8 +3,10 @@ import { formatCsv } from '../utils/utils';
 import { FILE_FOLDER_LOCATION } from './importer.conf';
 import { FileExtension } from './models/file-type/file-type.model';
 import { InvoiceLiterals } from './models/result/fields.result.model';
-import { InitialResult, Result } from './models/result/result.model';
-import { isCorrectField } from './validators/ok.validators';
+import { Error_Result, KO_Result } from './models/result/ko.result.model';
+import { OK_Result } from './models/result/ok.result.model';
+import { Result } from './models/result/result.model';
+import { findErrors } from './validators/ok.validators';
 
 
 export class Importer {
@@ -26,22 +28,28 @@ export class Importer {
 
       const jsFile: Object[] = formatCsv(file, InvoiceLiterals);
 
-      let result: Result = InitialResult;                                                            //Borrar initial Result David
-
-      const validatedInvoice: Object[] =
-        jsFile.map((invoiceObject: { [key: string]: any }) => {                                     //key is string type and not [key: keyof OK_Result] becouse is not guaranteed
-          Object.keys(invoiceObject)
-            .forEach((key: any) => {
-              const goodFormatField: boolean = isCorrectField(key, invoiceObject[key])
-              if (!goodFormatField) {
-                invoiceObject[key] = null;
-              }
-            })
-          return invoiceObject
+      const validatedInvoice: { data: Object, errors: (Error_Result | null)[] }[] =
+        jsFile.map((invoiceObject: { [key: string]: any }) => {
+          return {
+            data: invoiceObject,
+            errors: [
+              ...Object.keys(invoiceObject)
+                .map((key) => findErrors(key as keyof OK_Result, invoiceObject[key]))
+                .filter(err => err)
+            ]
+          }
         })
-
-      console.log(validatedInvoice)
-
+      let result: Result = {
+        ok: validatedInvoice.filter(notErrors => !notErrors.errors.length).map(invoice => invoice.data) as OK_Result[],
+        ko: validatedInvoice
+          .map((invoice, index: number) =>
+          ({
+            line: index + 1,
+            errors: invoice.errors
+          })
+          )
+          .filter(noErrors => noErrors.errors.length) as KO_Result[],
+      }
       resolve(result)
     })
   }
