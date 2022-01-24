@@ -1,4 +1,4 @@
-import { DateStr_Field_Result } from './fields.result.model';
+import { DateStr_Field_Result, Status_Field_Result } from './fields.result.model';
 
 export interface OK_Result {
   code: string,
@@ -8,5 +8,5 @@ export interface OK_Result {
   subtotal: number,
   taxes: number,
   total: number,
-  status: string,
+  status: Status_Field_Result,
 }

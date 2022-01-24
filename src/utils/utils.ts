@@ -1,24 +1,23 @@
-import { OK_Result } from '../importer/models/result/ok.result.model';
 
-export function csv2Json(csvData: string): OK_Result[] {
+
+export function formatCsv(csvData: string, enumLiterals?: any): Object[] {                     //literals optional parameter. Convert the field title of the csv to a custom param of the result object
 
   const sentences = csvData.split(/\n|\r/g).filter((line: string) => line);
 
-  const headers: (keyof OK_Result)[] = sentences[0].split(/;/g) as (keyof OK_Result)[];
-  sentences.shift() //Deleting headers from csv content
+  const titles: string[] = sentences[0].split(/;/g);
+
+  sentences.shift()                                                                           //Deleting titles from csv content
+
   return sentences.reduce((acc: any[], sentence: string) => {
 
-    const invoice: any = {}; // Declared "any" because OK_RESULT is not guaranteed;
+    const lineCsv: any = {};                                                                  // Declared "any" because OK_RESULT is not guaranteed;
 
     sentence.split(/;/g).forEach((value: string, index: number) => {
-      const title: keyof OK_Result = headers[index];
-      invoice[title] = value ? Number(Number(value).toFixed(2)) || value.trim() : null;
+      const title: string = titles[index].trim();
+      const objectKey: string = enumLiterals ? enumLiterals[title] : title;                   //Checking if need change titles
+
+      lineCsv[objectKey] = value ? Number(Number(value).toFixed(1)) || value.trim() : null;
     })
-
-    return [...acc, invoice];
+    return [...acc, lineCsv];
   }, []);
-}
-
-export function isOK(obj: any): obj is OK_Result {
-  return obj.foo !== undefined
 }
