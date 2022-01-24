@@ -6,9 +6,6 @@ export interface Result {
   ok: OK_Result[],
   ko: KO_Result[]
 }
-
-export const InitialResult: Result = { ok: [], ko: [] }
-
 export interface ControlInvoice {
   data: Object,
   errors: (Error_Result | null)[]                               //Null is when there are NOT errors
