@@ -11,5 +11,5 @@ export const InitialResult: Result = { ok: [], ko: [] }
 
 export interface ControlInvoice {
   data: Object,
-  errors: (Error_Result | null)[]
+  errors: (Error_Result | null)[]                               //Null is when there are NOT errors
 }

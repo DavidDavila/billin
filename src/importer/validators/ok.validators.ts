@@ -14,8 +14,7 @@ const OK_Result_Validation: { [key: string]: Function } = {
 };
 
 
-export const findErrors = (property: keyof OK_Result, value: any): Error_Result | null => {
-  const validateFunction = OK_Result_Validation;
+export const findErrors = (property: keyof OK_Result, value: any, validateSystem: { [key: string]: Function } = OK_Result_Validation): Error_Result | null => {     //Sorry for this spagetthi line :)
   if (!value) {
     return {
       property,
@@ -23,7 +22,7 @@ export const findErrors = (property: keyof OK_Result, value: any): Error_Result 
     }
   }
   try {
-    if (!validateFunction[property](value)) {
+    if (!validateSystem[property](value)) {
       return {
         property,
         message: Error_Message.Invalid

@@ -52,9 +52,7 @@ export class Importer {
           .filter(noErrors => noErrors.errors.length) as KO_Result[],
       }
 
-      resolve(result)
+      resolve(result);
     })
   }
-
-
 }
