@@ -10,14 +10,17 @@ export function formatCsv(csvData: string, enumLiterals?: any): Object[] {      
 
   return sentences.reduce((acc: any[], sentence: string) => {
 
-    const lineCsv: any = {};                                                                  // Declared "any" because OK_RESULT is not guaranteed;
+    const lineCsv: any = {};                                                                  // Declared "any" because it can use for other uses case;
 
-    sentence.split(/;/g).forEach((value: string, index: number) => {
-      const title: string = titles[index].trim();
-      const objectKey: string = enumLiterals ? enumLiterals[title] : title;                   //Checking if need change titles
+    sentence
+      .split(/;/g)
+      .forEach((value: string, index: number) => {
+        const title: string = titles[index].trim();
 
-      lineCsv[objectKey] = value ? Number(Number(value).toFixed(1)) || value.trim() : null;
-    })
+        const objectKey: string = enumLiterals ? enumLiterals[title] : title;                   //Checking if need change titles
+
+        lineCsv[objectKey] = value ? Number(Number(value).toFixed(1)) || value.trim() : null;   // Rounding decimals like requierements
+      })
     return [...acc, lineCsv];
   }, []);
 }
